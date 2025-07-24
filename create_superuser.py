@@ -10,12 +10,13 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-username = config("DJANGO_SUPERUSER_USERNAME")
 email = config("DJANGO_SUPERUSER_EMAIL")
+name = config("DJANGO_SUPERUSER_NAME")  # optional, if your model requires it
 password = config("DJANGO_SUPERUSER_PASSWORD")
 
-if not User.objects.filter(username=username).exists():
-    User.objects.create_superuser(username=username, email=email, password=password)
+# ✅ Check by email instead of username
+if not User.objects.filter(email=email).exists():
+    User.objects.create_superuser(email=email, name=name, password=password)
     print("✅ Superuser created successfully.")
 else:
     print("ℹ️ Superuser already exists.")
