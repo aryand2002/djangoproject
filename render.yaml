@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: deploydjango
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn deploydjango.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
