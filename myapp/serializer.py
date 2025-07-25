@@ -33,8 +33,13 @@ class LoginSerializer(serializers.Serializer):
 from .models import Decoration
 
 class DecorationSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:
         model = Decoration
         fields = '__all__'
+
+    def get_image(self, obj):
+        return obj.image.url if obj.image else None
 
 
