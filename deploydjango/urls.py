@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import path, include
 from myapp.views import *
 from rest_framework_simplejwt.views import TokenRefreshView
-from django.conf.urls.static import static
+
 from django.conf import settings
 
 
@@ -20,4 +20,4 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('decorations/', DecorationListCreateAPIView.as_view(), name='decoration-list-create'),
     path('decorations/<int:pk>/', DecorationDetailAPIView.as_view(), name='decoration-detail'),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

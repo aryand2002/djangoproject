@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .manager import UserManager
 from django.core.validators import RegexValidator
+from cloudinary.models import CloudinaryField
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
     USER_TYPE_CHOICES = (
@@ -58,7 +59,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
 
 class Decoration(models.Model):
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='decorations/')
+    image = CloudinaryField('image', blank=True, null=True)
     category = models.CharField(max_length=100)
 
     def __str__(self):
