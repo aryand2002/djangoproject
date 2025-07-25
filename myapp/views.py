@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializer import *
+from rest_framework.parsers import MultiPartParser, FormParser
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -30,7 +31,10 @@ class LoginView(APIView):
             return Response({'msg': 'Login successful', 'tokens': tokens}, status=200)
         return Response(serializer.errors, status=400)
     
+
 class DecorationListCreateAPIView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
     def get(self, request):
         decorations = Decoration.objects.all()
         serializer = DecorationSerializer(decorations, many=True)
