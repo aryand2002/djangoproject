@@ -77,3 +77,30 @@ class DecorationDetailAPIView(APIView):
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
         decoration.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class BlogPostAPIView(APIView):
+    def get(self, request):
+        posts = BlogPost.objects.all().order_by('-created_at')
+        serializer = BlogPostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = BlogPostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CatalogItemAPIView(APIView):
+    def get(self, request):
+        items = CatalogItem.objects.all()
+        serializer = CatalogItemSerializer(items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = CatalogItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

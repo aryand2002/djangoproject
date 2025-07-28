@@ -1,7 +1,7 @@
 # serializers.py
 
 from rest_framework import serializers
-from .models import UserModel
+from .models import *
 from django.contrib.auth import authenticate
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -30,13 +30,23 @@ class LoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError("Invalid credentials")
     
-from .models import Decoration
+
 
 class DecorationSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
 
     class Meta:
         model = Decoration
+        fields = '__all__'
+
+class CatalogItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CatalogItem
+        fields = '__all__'
+
+class BlogPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BlogPost
         fields = '__all__'
 
 

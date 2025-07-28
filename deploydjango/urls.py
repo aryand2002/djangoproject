@@ -20,4 +20,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('decorations/', DecorationListCreateAPIView.as_view(), name='decoration-list-create'),
     path('decorations/<int:pk>/', DecorationDetailAPIView.as_view(), name='decoration-detail'),
+    path('catalog/', CatalogItemAPIView.as_view(), name='catalog-api'),
+    path('blog/', BlogPostAPIView.as_view(), name='blog-api'),
 ]

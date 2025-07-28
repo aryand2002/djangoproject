@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .manager import UserManager
 from django.core.validators import RegexValidator
 from cloudinary.models import CloudinaryField
+from django.utils.text import slugify
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
     USER_TYPE_CHOICES = (
@@ -64,3 +65,30 @@ class Decoration(models.Model):
 
     def __str__(self):
         return self.name
+
+class CatalogItem(models.Model):
+    category = models.ForeignKey(Decoration, on_delete=models.CASCADE)
+    price = models.IntegerField()
+    image = CloudinaryField('image', blank=True, null=True)
+    itemname = models.CharField(max_length=100)
+    description = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.itemname
+
+class BlogPost(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    author = models.CharField(max_length=200)
+    image = CloudinaryField('image', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(BlogPost, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
