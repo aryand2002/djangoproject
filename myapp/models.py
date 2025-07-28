@@ -4,6 +4,7 @@ from .manager import UserManager
 from django.core.validators import RegexValidator
 from cloudinary.models import CloudinaryField
 from django.utils.text import slugify
+from django.core.exceptions import ValidationError
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
     USER_TYPE_CHOICES = (
@@ -92,3 +93,6 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+    
+class GalleryImage(models.Model):
+    image = CloudinaryField('image')

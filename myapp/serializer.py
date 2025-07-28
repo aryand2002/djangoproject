@@ -50,3 +50,15 @@ class BlogPostSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+def validate_image(value):
+    if value.size > 1024 * 1024:  # 1MB
+        raise serializers.ValidationError("Image must be less than 1MB")
+    return value
+
+class GalleryImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(validators=[validate_image])
+
+    class Meta:
+        model = GalleryImage
+        fields = ['image']
+

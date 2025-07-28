@@ -112,4 +112,21 @@ class CatalogItemAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class GalleryUploadView(APIView):
+    def post(self, request, format=None):
+        images = request.FILES.getlist('images')
+        if len(images) > 5:
+            return Response({'error': 'You can upload a maximum of 5 images at once.'}, status=400)
+
+        errors = []
+        for img in images:
+            serializer = GalleryImageSerializer(data={'image': img})
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                errors.append(serializer.errors)
+
+        if errors:
+            return Response({'errors': errors}, status=400)
+        return Response({'message': 'Images uploaded successfully'}, status=201)
 
