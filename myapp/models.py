@@ -94,6 +94,6 @@ class BlogPost(models.Model):
     def __str__(self):
         return self.title
     
-class Gallery(models.model):
+class Gallery(models.Model):
     image = CloudinaryField('image')
     uploaded_at = models.DateTimeField(auto_now_add=True)
