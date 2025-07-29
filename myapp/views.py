@@ -62,12 +62,13 @@ class DecorationDetailAPIView(APIView):
         serializer = DecorationSerializer(decoration)
         return Response(serializer.data)
 
-    def put(self, request, pk):
-        decoration = self.get_object(pk)
-        if decoration is None:
+    def patch(self, request, pk):
+        try:
+            decoration = Decoration.objects.get(pk=pk)
+        except Decoration.DoesNotExist:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = DecorationSerializer(decoration, data=request.data, partial=True)  # ✅ Allow partial update
+
+        serializer = DecorationSerializer(decoration, data=request.data, partial=True)  # ✅ partial=True for PATCH
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
