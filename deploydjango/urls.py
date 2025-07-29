@@ -26,4 +26,5 @@ urlpatterns = [
     path('blog/<int:pk>/', BlogPostAPIView.as_view()), 
     path('gallery/', GalleryView.as_view(), name='upload-gallery'),
     path('gallery/<int:pk>/', GalleryView.as_view()),
+    path('catalog-items/', CategeryItemView.as_view(), name='catalog-items'),
 ]
