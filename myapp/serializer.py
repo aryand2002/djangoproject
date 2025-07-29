@@ -54,3 +54,10 @@ class GalleryImageSerializer(serializers.ModelSerializer):
         model = Gallery
         fields = '__all__'
 
+class CatalogItemSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source='category.name')  # get name from ForeignKey
+
+    class Meta:
+        model = CatalogItem
+        fields = ['id', 'category', 'price', 'image', 'itemname', 'description']
+

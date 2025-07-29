@@ -207,4 +207,16 @@ class GalleryView(APIView):
         except Gallery.DoesNotExist:
             return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
 
+class CategeryItemView(APIView):
+    def get(self, request):
+        category_id = request.query_params.get('category')
+
+        if category_id:
+            items = CatalogItem.objects.filter(category_id=category_id)
+        else:
+            items = CatalogItem.objects.all()
+
+        serializer = CatalogItemSerializer(items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
