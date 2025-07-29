@@ -82,30 +82,60 @@ class DecorationDetailAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class BlogPostAPIView(APIView):
-    def get(self, request):
-        posts = BlogPost.objects.all().order_by('-created_at')
-        serializer = BlogPostSerializer(posts, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+    def get(self, request, pk=None):
+        if pk:
+            try:
+                post = BlogPost.objects.get(pk=pk)
+                serializer = BlogPostSerializer(post)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except BlogPost.DoesNotExist:
+                return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            posts = BlogPost.objects.all().order_by('-created_at')
+            serializer = BlogPostSerializer(posts, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
+        serializer = BlogPostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk):
         try:
-            serializer = BlogPostSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            print("❌ Error:", str(e))
-            traceback.print_exc()
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            post = BlogPost.objects.get(pk=pk)
+        except BlogPost.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = BlogPostSerializer(post, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            post = BlogPost.objects.get(pk=pk)
+            post.delete()
+            return Response({'message': 'Deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except BlogPost.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class CatalogItemAPIView(APIView):
-    def get(self, request):
-        items = CatalogItem.objects.all()
-        serializer = CatalogItemSerializer(items, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, request, pk=None):
+        if pk:
+            try:
+                item = CatalogItem.objects.get(pk=pk)
+                serializer = CatalogItemSerializer(item)
+                return Response(serializer.data)
+            except CatalogItem.DoesNotExist:
+                return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            items = CatalogItem.objects.all()
+            serializer = CatalogItemSerializer(items, many=True)
+            return Response(serializer.data)
 
     def post(self, request):
         serializer = CatalogItemSerializer(data=request.data)
@@ -114,15 +144,64 @@ class CatalogItemAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def put(self, request, pk):
+        try:
+            item = CatalogItem.objects.get(pk=pk)
+        except CatalogItem.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = CatalogItemSerializer(item, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            item = CatalogItem.objects.get(pk=pk)
+            item.delete()
+            return Response({'message': 'Deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except CatalogItem.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+
 class GalleryView(APIView):
+    def get(self, request, pk=None):
+        if pk:
+            try:
+                item = Gallery.objects.get(pk=pk)
+                serializer = GalleryImageSerializer(item)
+                return Response(serializer.data)
+            except Gallery.DoesNotExist:
+                return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            items = Gallery.objects.all()
+            serializer = GalleryImageSerializer(items, many=True)
+            return Response(serializer.data)
+
     def post(self, request):
         serializer = GalleryImageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-   
-    def get(self, request):
-        items = Gallery.objects.all()
-        serializer = GalleryImageSerializer(items, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, pk):
+        try:
+            item = Gallery.objects.get(pk=pk)
+        except Gallery.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = GalleryImageSerializer(item, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            item = Gallery.objects.get(pk=pk)
+            item.delete()
+            return Response({'message': 'Deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except Gallery.DoesNotExist:
+            return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+

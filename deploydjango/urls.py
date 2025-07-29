@@ -21,6 +21,9 @@ urlpatterns = [
     path('decorations/', DecorationListCreateAPIView.as_view(), name='decoration-list-create'),
     path('decorations/<int:pk>/', DecorationDetailAPIView.as_view(), name='decoration-detail'),
     path('catalog/', CatalogItemAPIView.as_view(), name='catalog-api'),
+    path('catalog/<int:pk>/', CatalogItemAPIView.as_view()),
     path('blog/', BlogPostAPIView.as_view(), name='blog-api'),
+    path('blog/<int:pk>/', BlogPostAPIView.as_view()), 
     path('gallery/', GalleryView.as_view(), name='upload-gallery'),
+    path('gallery/<int:pk>/', GalleryView.as_view()),
 ]
