@@ -22,5 +22,5 @@ urlpatterns = [
     path('decorations/<int:pk>/', DecorationDetailAPIView.as_view(), name='decoration-detail'),
     path('catalog/', CatalogItemAPIView.as_view(), name='catalog-api'),
     path('blog/', BlogPostAPIView.as_view(), name='blog-api'),
-    path('upload-gallery/', GalleryUploadView.as_view(), name='upload-gallery'),
+    path('gallery/', GalleryView.as_view(), name='upload-gallery'),
 ]
